@@ -1,9 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import LoginPage from './pages/Login/login';
+import LoginPage from './pages/login/login';
 import { Dashboard } from './layouts/Dashboard';
 import NonAuth from './layouts/NonAuth';
 import Root from './layouts/Root';
+import User from './pages/users/user';
 
 export const router = createBrowserRouter([
     {
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
                     {
                         path: '',
                         element: <HomePage />,
+                    },
+                    {
+                        path: '/users',
+                        element: <User />,
                     },
                 ],
             },
