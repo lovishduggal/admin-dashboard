@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
-            <ConfigProvider
+            <ConfigProvider 
                 theme={{
                     token: {
                         colorPrimary: '#F65F42',
