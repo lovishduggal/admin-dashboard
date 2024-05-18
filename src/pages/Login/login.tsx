@@ -10,7 +10,7 @@ import {
     Space,
 } from 'antd';
 import { LockFilled, LockOutlined, UserOutlined } from '@ant-design/icons';
-import Logo from '../../icons/Logo';
+import Logo from '../../components/icons/Logo';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Credentials } from '../../types';
 import { login, logout, self } from '../../http/api';

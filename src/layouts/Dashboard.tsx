@@ -12,12 +12,12 @@ import {
 } from 'antd';
 import Icon, { BellFilled } from '@ant-design/icons';
 import { useState } from 'react';
-import Logo from '../icons/Logo';
-import Home from '../icons/Home';
-import UserIcon from '../icons/UserIcon ';
-import { foodIcon } from '../icons/foodIcon';
-import BasketIcon from '../icons/BasketIcon';
-import GiftIcon from '../icons/GiftIcon';
+import Logo from '../components/icons/Logo';
+import Home from '../components/icons/Home';
+import UserIcon from '../components/icons/UserIcon ';
+import { foodIcon } from '../components/icons/foodIcon';
+import BasketIcon from '../components/icons/BasketIcon';
+import GiftIcon from '../components/icons/GiftIcon';
 import { useMutation } from '@tanstack/react-query';
 import { logout } from '../http/api';
 
@@ -132,7 +132,7 @@ export const Dashboard = () => {
                             </Space>
                         </Flex>
                     </Header>
-                    <Content style={{ margin: '0 16px' }}>
+                    <Content style={{ margin: '24px' }}>
                         {' '}
                         <Outlet />
                     </Content>
