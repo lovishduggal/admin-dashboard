@@ -4,6 +4,7 @@ import { self } from '../http/api';
 import { useAuthStore } from '../store';
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
+import { Flex, Spin } from 'antd';
 
 const getSelf = async () => {
     const { data } = await self();
@@ -28,7 +29,16 @@ const Root = () => {
         if (data) setUser(data);
     }, [data, setUser]);
 
-    if (isLoading) return <h1>Loading...</h1>;
+    if (isLoading)
+        return (
+            <Flex
+                style={{ height: '100vh' }}
+                align="center"
+                justify="center"
+                gap="middle">
+                <Spin tip="Loading..." size="large" />
+            </Flex>
+        );
     return <Outlet />;
 };
 
