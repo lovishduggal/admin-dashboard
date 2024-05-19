@@ -4,7 +4,8 @@ import { self } from '../http/api';
 import { useAuthStore } from '../store';
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
-import { Flex, Spin } from 'antd';
+import { Flex } from 'antd';
+import Spinner from '../components/spinner/Spinner';
 
 const getSelf = async () => {
     const { data } = await self();
@@ -36,7 +37,7 @@ const Root = () => {
                 align="center"
                 justify="center"
                 gap="middle">
-                <Spin tip="Loading..." size="large" />
+                <Spinner />
             </Flex>
         );
     return <Outlet />;
