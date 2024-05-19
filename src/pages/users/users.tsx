@@ -1,10 +1,11 @@
 import { RightOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { Alert, Breadcrumb, Flex, Space, Table } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { getUsers } from '../../http/api';
 import Spinner from '../../components/spinner/Spinner';
 import { UserData } from '../../types';
+import { useAuthStore } from '../../store';
 
 const columns = [
     {
@@ -37,6 +38,8 @@ const columns = [
 ];
 
 const User = () => {
+    const { user } = useAuthStore();
+
     const {
         data: users,
         isLoading,
@@ -45,8 +48,13 @@ const User = () => {
     } = useQuery({
         queryKey: ['users'],
         queryFn: () => getUsers().then((res) => res.data),
+        enabled: user?.role === 'admin',
     });
 
+    if (user?.role !== 'admin') {
+        return <Navigate to="/"></Navigate>;
+    }
+    
     return (
         <>
             <Space direction="vertical" style={{ width: '100%' }}>
@@ -69,7 +77,7 @@ const User = () => {
                 {isError && (
                     <Alert message={error.message} type="error" closable />
                 )}
-                <Table columns={columns} dataSource={users || []} />
+                {users && <Table columns={columns} dataSource={users} />}
             </Space>
         </>
     );
