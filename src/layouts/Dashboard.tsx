@@ -97,14 +97,27 @@ export const Dashboard = () => {
                             gap={'middle'}
                             align="start"
                             justify="space-between">
-                            <Badge
-                                text={
-                                    user?.role === 'admin'
-                                        ? 'Global'
-                                        : user?.tenant?.name
-                                }
-                                status="success"
-                            />
+                            {collapsed ? (
+                                <Badge
+                                    style={{ marginLeft: '50px' }}
+                                    text={
+                                        user?.role === 'admin'
+                                            ? 'Global'
+                                            : user?.tenant?.name
+                                    }
+                                    status="success"
+                                />
+                            ) : (
+                                <Badge
+                                    text={
+                                        user?.role === 'admin'
+                                            ? 'Global'
+                                            : user?.tenant?.name
+                                    }
+                                    status="success"
+                                />
+                            )}
+
                             <Space size={'small'}>
                                 <Badge dot={true}>
                                     <BellFilled />{' '}
