@@ -6,6 +6,7 @@ import { getUsers } from '../../http/api';
 import Spinner from '../../components/spinner/Spinner';
 import { UserData } from '../../types';
 import { useAuthStore } from '../../store';
+import UserFilter from './userFilter';
 
 const columns = [
     {
@@ -54,10 +55,13 @@ const User = () => {
     if (user?.role !== 'admin') {
         return <Navigate to="/"></Navigate>;
     }
-    
+
     return (
         <>
-            <Space direction="vertical" style={{ width: '100%' }}>
+            <Space
+                direction="vertical"
+                size={'large'}
+                style={{ width: '100%' }}>
                 <Breadcrumb
                     separator={<RightOutlined />}
                     items={[
@@ -77,6 +81,9 @@ const User = () => {
                 {isError && (
                     <Alert message={error.message} type="error" closable />
                 )}
+
+                <UserFilter />
+
                 {users && <Table columns={columns} dataSource={users} />}
             </Space>
         </>
