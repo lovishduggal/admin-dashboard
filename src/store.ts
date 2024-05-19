@@ -16,6 +16,8 @@ export interface User {
 }
 
 interface AuthState {
+    mode: string;
+    setMode: (mode: string) => void;
     user: User | null;
     setUser: (user: User) => void;
     logout: () => void;
@@ -23,6 +25,8 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>()(
     devtools((set) => ({
+        mode: 'light',
+        setMode: (mode: string) => set({ mode }),
         user: null,
         setUser: (user) => set({ user }),
         logout: () => set({ user: null }),

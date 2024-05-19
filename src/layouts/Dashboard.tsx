@@ -10,7 +10,12 @@ import {
     Space,
     theme,
 } from 'antd';
-import Icon, { BellFilled } from '@ant-design/icons';
+import Icon, {
+    BellFilled,
+    MoonFilled,
+    SettingFilled,
+    SunFilled,
+} from '@ant-design/icons';
 import { useState } from 'react';
 import Logo from '../components/icons/Logo';
 import Home from '../components/icons/Home';
@@ -23,7 +28,7 @@ import { logout } from '../http/api';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const getMenuItems = (role: string) => {
+const getMenuItems = (role: string, setMode: { (mode: string): void }) => {
     const baseItems = [
         {
             key: '/',
@@ -45,6 +50,25 @@ const getMenuItems = (role: string) => {
             icon: <Icon component={GiftIcon} />,
             label: <NavLink to="/promos">Promos</NavLink>,
         },
+        {
+            key: '/setting',
+            label: 'Setting',
+            icon: <SettingFilled />,
+            children: [
+                {
+                    key: 'light',
+                    label: 'Light',
+                    icon: <SunFilled />,
+                    onClick: () => setMode('light'),
+                },
+                {
+                    key: 'dark',
+                    label: 'Dark',
+                    icon: <MoonFilled />,
+                    onClick: () => setMode('dark'),
+                },
+            ],
+        },
     ];
 
     if (role === 'admin') {
@@ -60,8 +84,8 @@ const getMenuItems = (role: string) => {
 };
 
 export const Dashboard = () => {
-    const { user, logout: logoutFromStore } = useAuthStore();
-    const items = getMenuItems(user?.role as string);
+    const { user, logout: logoutFromStore, setMode } = useAuthStore();
+    const items = getMenuItems(user?.role as string, setMode);
 
     const { mutate: logoutMutate } = useMutation({
         mutationKey: ['logout'],
