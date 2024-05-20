@@ -82,9 +82,15 @@ const User = () => {
                     <Alert message={error.message} type="error" closable />
                 )}
 
-                <UserFilter />
+                <UserFilter
+                    onFilterChange={(filterName, filterValue) => {
+                        console.log(filterName, filterValue);
+                    }}
+                />
 
-                {users && <Table columns={columns} dataSource={users} />}
+                {users && (
+                    <Table columns={columns} dataSource={users} rowKey={'id'} />
+                )}
             </Space>
         </>
     );

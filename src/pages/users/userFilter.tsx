@@ -1,7 +1,11 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Input, Row, Select } from 'antd';
 
-const UserFilter = () => {
+type UserFilterProps = {
+    onFilterChange: (filterName: string, filterValue: string) => void;
+};
+
+const UserFilter = ({ onFilterChange }: UserFilterProps) => {
     return (
         <Card>
             <Row justify={'space-between'}>
@@ -10,15 +14,25 @@ const UserFilter = () => {
                     <Row gutter={20}>
                         <Col span={8}>
                             <Input.Search
+                                allowClear={true}
                                 style={{ width: '100%' }}
                                 placeholder="Search"
+                                onChange={(e) =>
+                                    onFilterChange(
+                                        'UserSearchQuery',
+                                        e.target.value
+                                    )
+                                }
                             />{' '}
                         </Col>
                         <Col span={8}>
                             <Select
                                 placeholder={'Role'}
                                 style={{ width: '100%' }}
-                                allowClear>
+                                allowClear
+                                onChange={(selectedItem) =>
+                                    onFilterChange('roleFilter', selectedItem)
+                                }>
                                 <Select.Option
                                     value="amin"
                                     children={'Admin'}
@@ -37,7 +51,10 @@ const UserFilter = () => {
                             <Select
                                 placeholder={'Status'}
                                 style={{ width: '100%' }}
-                                allowClear>
+                                allowClear
+                                onChange={(selectedItem) =>
+                                    onFilterChange('statusFilter', selectedItem)
+                                }>
                                 <Select.Option value="ban" children={'Ban'} />
                                 <Select.Option
                                     value="active"
