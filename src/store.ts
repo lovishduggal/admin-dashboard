@@ -32,3 +32,15 @@ export const useAuthStore = create<AuthState>()(
         logout: () => set({ user: null }),
     }))
 );
+
+interface TenantState {
+    tenant: Tenant | null;
+    setTenant: (tenant: Tenant) => void;
+}
+
+export const useTenantStore = create<TenantState>()(
+    devtools((set) => ({
+        tenant: null,
+        setTenant: (tenant) => set({ tenant }),
+    }))
+);

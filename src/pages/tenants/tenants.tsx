@@ -2,11 +2,10 @@ import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { Alert, Breadcrumb, Button, Drawer, Flex, Space, Table } from 'antd';
 import { Link, Navigate } from 'react-router-dom';
-import { getUsers } from '../../http/api';
+import { getTenants } from '../../http/api';
 import Spinner from '../../components/spinner/Spinner';
-import { UserData } from '../../types';
 import { useAuthStore } from '../../store';
-import UserFilter from './userFilter';
+import UserFilter from './tenantFilter';
 import { useState } from 'react';
 
 const columns = [
@@ -17,46 +16,35 @@ const columns = [
     },
     {
         title: 'Name',
-        dataIndex: 'firstName',
-        key: 'firstName',
-        render: (_text: string, record: UserData) => {
-            return (
-                <div>
-                    {record.firstName} {record.lastName}
-                </div>
-            );
-        },
+        dataIndex: 'name',
+        key: 'name',
     },
     {
-        title: 'Email',
-        dataIndex: 'email',
-        key: 'email',
-    },
-    {
-        title: 'Role',
-        dataIndex: 'role',
-        key: 'role',
+        title: 'Address',
+        dataIndex: 'address',
+        key: 'address',
     },
 ];
 
-const Users = () => {
+const Tenants = () => {
     const { user } = useAuthStore();
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     const {
-        data: users,
+        data: tenants,
         isLoading,
         isError,
         error,
     } = useQuery({
-        queryKey: ['users'],
-        queryFn: () => getUsers().then((res) => res.data),
+        queryKey: ['tenants'],
+        queryFn: () => getTenants().then((res) => res.data),
         enabled: user?.role === 'admin',
     });
 
     if (user?.role !== 'admin') {
         return <Navigate to="/"></Navigate>;
     }
+    console.log(tenants);
 
     return (
         <>
@@ -93,16 +81,20 @@ const Users = () => {
                         type="primary"
                         icon={<PlusOutlined />}
                         onClick={() => setDrawerOpen(true)}>
-                        Create user
+                        Create Tenant
                     </Button>
                 </UserFilter>
 
-                {users && (
-                    <Table columns={columns} dataSource={users} rowKey={'id'} />
+                {tenants && (
+                    <Table
+                        columns={columns}
+                        dataSource={tenants}
+                        rowKey={'id'}
+                    />
                 )}
 
                 <Drawer
-                    title="Create user"
+                    title="Create Tenant"
                     width={720}
                     open={drawerOpen}
                     destroyOnClose={true}
@@ -120,4 +112,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default Tenants;
