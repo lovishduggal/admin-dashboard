@@ -1,6 +1,16 @@
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Breadcrumb, Button, Drawer, Flex, Space, Table } from 'antd';
+import {
+    Alert,
+    Breadcrumb,
+    Button,
+    Drawer,
+    Flex,
+    Form,
+    Space,
+    Table,
+    theme,
+} from 'antd';
 import { Link, Navigate } from 'react-router-dom';
 import { getUsers } from '../../http/api';
 import Spinner from '../../components/spinner/Spinner';
@@ -8,6 +18,7 @@ import { UserData } from '../../types';
 import { useAuthStore } from '../../store';
 import UserFilter from './userFilter';
 import { useState } from 'react';
+import UserForm from './forms/UserForm';
 
 const columns = [
     {
@@ -40,6 +51,9 @@ const columns = [
 ];
 
 const Users = () => {
+    const {
+        token: { colorBgLayout },
+    } = theme.useToken();
     const { user } = useAuthStore();
     const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -104,6 +118,7 @@ const Users = () => {
                 <Drawer
                     title="Create user"
                     width={720}
+                    styles={{ body: { background: colorBgLayout } }}
                     open={drawerOpen}
                     destroyOnClose={true}
                     onClose={() => setDrawerOpen(false)}
@@ -113,7 +128,10 @@ const Users = () => {
                             <Button type="primary">Submit</Button>
                         </Space>
                     }>
-                    <p>Some contents...</p>
+                    <Form layout="vertical">
+                        {' '}
+                        <UserForm />
+                    </Form>
                 </Drawer>
             </Space>
         </>
