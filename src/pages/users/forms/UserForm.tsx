@@ -21,17 +21,46 @@ const UserForm = () => {
                             <Col span={12}>
                                 <Form.Item
                                     label={'First name'}
-                                    name="firstName">
+                                    name="firstName"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Please input your first name!',
+                                        },
+                                    ]}>
                                     <Input size="large" />
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
-                                <Form.Item label={'Last name'} name="lastName">
+                                <Form.Item
+                                    label={'Last name'}
+                                    name="lastName"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Please input your last name!',
+                                        },
+                                    ]}>
                                     <Input size="large" />
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
-                                <Form.Item label={'Email'} name="email">
+                                <Form.Item
+                                    label={'Email'}
+                                    name="email"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Please input your last email!',
+                                        },
+                                        {
+                                            type: 'email',
+                                            message: 'Invalid email!',
+                                        },
+                                    ]}>
                                     <Input size="large" />
                                 </Form.Item>
                             </Col>
@@ -40,7 +69,16 @@ const UserForm = () => {
                     <Card title={'Security info'} bordered={false}>
                         <Row gutter={20}>
                             <Col span={12}>
-                                <Form.Item label={'Password'} name="password">
+                                <Form.Item
+                                    label={'Password'}
+                                    name="password"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Please input your password!',
+                                        },
+                                    ]}>
                                     <Input size="large" type="password" />
                                 </Form.Item>
                             </Col>
@@ -49,7 +87,15 @@ const UserForm = () => {
                     <Card title={'Role'} bordered={false}>
                         <Row gutter={20}>
                             <Col span={12}>
-                                <Form.Item label={'Role'} name="role">
+                                <Form.Item
+                                    label={'Role'}
+                                    name="role"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please select role!',
+                                        },
+                                    ]}>
                                     <Select
                                         size="large"
                                         placeholder={'Role'}
@@ -72,7 +118,16 @@ const UserForm = () => {
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
-                                <Form.Item label={'Restaurant'} name="tenantId">
+                                <Form.Item
+                                    label={'Restaurant'}
+                                    name="tenantId"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Please select restaurant!',
+                                        },
+                                    ]}>
                                     <Select
                                         size="large"
                                         placeholder={'Tenant'}
