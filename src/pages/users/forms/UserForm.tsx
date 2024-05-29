@@ -136,6 +136,7 @@ const UserForm = () => {
                                         onChange={() => {}}>
                                         {tenants.map((tenant: Tenant) => (
                                             <Select.Option
+                                                key={tenant.id}
                                                 value={tenant.id}
                                                 children={tenant.name}
                                             />

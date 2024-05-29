@@ -19,6 +19,7 @@ import { useAuthStore } from '../../store';
 import UserFilter from './userFilter';
 import { useState } from 'react';
 import UserForm from './forms/UserForm';
+import { PER_PAGE } from '../../constants';
 
 const columns = [
     {
@@ -53,12 +54,15 @@ const columns = [
 const Users = () => {
     const [form] = Form.useForm();
     const queryClient = useQueryClient();
-
     const {
         token: { colorBgLayout },
     } = theme.useToken();
     const { user } = useAuthStore();
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [queryParams, setQueryParams] = useState({
+        perPage: PER_PAGE,
+        currentPage: 1,
+    });
 
     const {
         data: users,
@@ -66,8 +70,13 @@ const Users = () => {
         isError,
         error,
     } = useQuery({
-        queryKey: ['users'],
-        queryFn: () => getUsers().then((res) => res.data),
+        queryKey: ['users', queryParams],
+        queryFn: () => {
+            const queryString = new URLSearchParams(
+                queryParams as unknown as Record<string, string>
+            ).toString();
+            return getUsers(queryString).then((res) => res.data);
+        },
         enabled: user?.role === 'admin',
     });
 
@@ -131,7 +140,21 @@ const Users = () => {
                 </UserFilter>
 
                 {users && (
-                    <Table columns={columns} dataSource={users} rowKey={'id'} />
+                    <Table
+                        columns={columns}
+                        dataSource={users?.data}
+                        rowKey={'id'}
+                        pagination={{
+                            total: users?.total,
+                            defaultPageSize: queryParams.perPage,
+                            current: queryParams.currentPage,
+                            onChange: (page) => {
+                                setQueryParams((prev) => {
+                                    return { ...prev, currentPage: page };
+                                });
+                            },
+                        }}
+                    />
                 )}
 
                 <Drawer
