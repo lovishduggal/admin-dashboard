@@ -1,5 +1,10 @@
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+    keepPreviousData,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from '@tanstack/react-query';
 import {
     Alert,
     Breadcrumb,
@@ -66,7 +71,7 @@ const Users = () => {
 
     const {
         data: users,
-        isLoading,
+        isFetching,
         isError,
         error,
     } = useQuery({
@@ -78,6 +83,7 @@ const Users = () => {
             return getUsers(queryString).then((res) => res.data);
         },
         enabled: user?.role === 'admin',
+        placeholderData: keepPreviousData,
     });
 
     const { mutate: userMutate } = useMutation({
@@ -106,25 +112,24 @@ const Users = () => {
                 direction="vertical"
                 size={'large'}
                 style={{ width: '100%' }}>
-                <Breadcrumb
-                    separator={<RightOutlined />}
-                    items={[
-                        { title: <Link to="/">Dashboard</Link> },
-                        { title: 'Users' },
-                    ]}
-                />
-                {isLoading && (
-                    <Flex
-                        style={{ height: 'calc(100vh - 206px)' }}
-                        align="center"
-                        justify="center"
-                        gap="middle">
-                        <Spinner />
-                    </Flex>
-                )}
-                {isError && (
-                    <Alert message={error.message} type="error" closable />
-                )}
+                <Flex justify="space-between" align="center">
+                    <Breadcrumb
+                        style={{ padding: '12px 0' }}
+                        separator={<RightOutlined />}
+                        items={[
+                            { title: <Link to="/">Dashboard</Link> },
+                            { title: 'Users' },
+                        ]}
+                    />
+                    {isFetching && (
+                        <Flex align="center" justify="center" gap="middle">
+                            <Spinner />
+                        </Flex>
+                    )}
+                    {isError && (
+                        <Alert message={error.message} type="error" closable />
+                    )}
+                </Flex>
 
                 <UserFilter
                     onFilterChange={(filterName, filterValue) => {
@@ -139,23 +144,21 @@ const Users = () => {
                     </Button>
                 </UserFilter>
 
-                {users && (
-                    <Table
-                        columns={columns}
-                        dataSource={users?.data}
-                        rowKey={'id'}
-                        pagination={{
-                            total: users?.total,
-                            defaultPageSize: queryParams.perPage,
-                            current: queryParams.currentPage,
-                            onChange: (page) => {
-                                setQueryParams((prev) => {
-                                    return { ...prev, currentPage: page };
-                                });
-                            },
-                        }}
-                    />
-                )}
+                <Table
+                    columns={columns}
+                    dataSource={users?.data}
+                    rowKey={'id'}
+                    pagination={{
+                        total: users?.total,
+                        defaultPageSize: queryParams.perPage,
+                        current: queryParams.currentPage,
+                        onChange: (page) => {
+                            setQueryParams((prev) => {
+                                return { ...prev, currentPage: page };
+                            });
+                        },
+                    }}
+                />
 
                 <Drawer
                     title="Create user"
