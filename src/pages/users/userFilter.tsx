@@ -1,11 +1,10 @@
-import { Card, Col, Input, Row, Select } from 'antd';
+import { Card, Col, Form, Input, Row, Select } from 'antd';
 
 type UserFilterProps = {
     children: React.ReactNode;
-    onFilterChange: (filterName: string, filterValue: string) => void;
 };
 
-const UserFilter = ({ onFilterChange, children }: UserFilterProps) => {
+const UserFilter = ({ children }: UserFilterProps) => {
     return (
         <Card>
             <Row justify={'space-between'}>
@@ -13,41 +12,36 @@ const UserFilter = ({ onFilterChange, children }: UserFilterProps) => {
                     {' '}
                     <Row gutter={20}>
                         <Col span={8}>
-                            <Input.Search
-                                allowClear={true}
-                                style={{ width: '100%' }}
-                                placeholder="Search"
-                                onChange={(e) =>
-                                    onFilterChange(
-                                        'UserSearchQuery',
-                                        e.target.value
-                                    )
-                                }
-                            />{' '}
+                            <Form.Item name="q">
+                                <Input.Search
+                                    allowClear={true}
+                                    style={{ width: '100%' }}
+                                    placeholder="Search"
+                                />
+                            </Form.Item>
                         </Col>
                         <Col span={8}>
-                            <Select
-                                placeholder={'Role'}
-                                style={{ width: '100%' }}
-                                allowClear
-                                onChange={(selectedItem) =>
-                                    onFilterChange('roleFilter', selectedItem)
-                                }>
-                                <Select.Option
-                                    value="amin"
-                                    children={'Admin'}
-                                />
-                                <Select.Option
-                                    value="manager"
-                                    children={'Manager'}
-                                />
-                                <Select.Option
-                                    value="customer"
-                                    children={'Customer'}
-                                />
-                            </Select>
+                            <Form.Item name={'role'}>
+                                <Select
+                                    placeholder={'Role'}
+                                    style={{ width: '100%' }}
+                                    allowClear>
+                                    <Select.Option
+                                        value="admin"
+                                        children={'Admin'}
+                                    />
+                                    <Select.Option
+                                        value="manager"
+                                        children={'Manager'}
+                                    />
+                                    <Select.Option
+                                        value="customer"
+                                        children={'Customer'}
+                                    />
+                                </Select>
+                            </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        {/* <Col span={8}>
                             <Select
                                 placeholder={'Status'}
                                 style={{ width: '100%' }}
@@ -61,7 +55,7 @@ const UserFilter = ({ onFilterChange, children }: UserFilterProps) => {
                                     children={'Active'}
                                 />
                             </Select>
-                        </Col>
+                        </Col> */}
                     </Row>{' '}
                 </Col>
                 <Col
