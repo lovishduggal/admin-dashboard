@@ -22,9 +22,10 @@ import Spinner from '../../components/spinner/Spinner';
 import { CreateUserData, FieldData, UserData } from '../../types';
 import { useAuthStore } from '../../store';
 import UserFilter from './userFilter';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import UserForm from './forms/UserForm';
 import { PER_PAGE } from '../../constants';
+import { debounce } from 'lodash';
 
 const columns = [
     {
@@ -100,6 +101,14 @@ const Users = () => {
         },
     });
 
+    const debounceQUpdate = useMemo(() => {
+        return debounce((q: string | undefined) => {
+            setQueryParams((prev) => {
+                return { ...prev, q };
+            });
+        }, 1000);
+    }, []);
+
     const onFilterChange = (changeFields: FieldData[]) => {
         console.log(changeFields);
         const changedFilterFields = changeFields
@@ -108,9 +117,13 @@ const Users = () => {
             }))
             .reduce((prev, curr) => ({ ...prev, ...curr }), {});
 
-        setQueryParams((prev) => {
-            return { ...prev, ...changedFilterFields };
-        });
+        if ('q' in changedFilterFields) {
+            debounceQUpdate(changedFilterFields.q);
+        } else {
+            setQueryParams((prev) => {
+                return { ...prev, ...changedFilterFields };
+            });
+        }
     };
     if (user?.role !== 'admin') {
         return <Navigate to="/"></Navigate>;
