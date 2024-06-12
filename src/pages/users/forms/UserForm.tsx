@@ -134,13 +134,14 @@ const UserForm = () => {
                                         style={{ width: '100%' }}
                                         allowClear
                                         onChange={() => {}}>
-                                        {tenants.map((tenant: Tenant) => (
-                                            <Select.Option
-                                                key={tenant.id}
-                                                value={tenant.id}
-                                                children={tenant.name}
-                                            />
-                                        ))}
+                                        {tenants &&
+                                            tenants.map((tenant: Tenant) => (
+                                                <Select.Option
+                                                    key={tenant.id}
+                                                    value={tenant.id}
+                                                    children={tenant.name}
+                                                />
+                                            ))}
                                     </Select>
                                 </Form.Item>
                             </Col>

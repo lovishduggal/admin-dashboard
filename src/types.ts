@@ -15,6 +15,7 @@ export type UserData = {
     createdAt: string;
     firstName: string;
     lastName: string;
+    tenant: Tenant | null;
 };
 
 export type CreateUserData = {
