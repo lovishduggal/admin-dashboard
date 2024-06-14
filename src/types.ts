@@ -4,6 +4,8 @@ export type Tenant = {
     address: string;
 };
 
+export type CreateTenantData = { name: string; address: string };
+
 export type Credentials = {
     email: string;
     password: string;

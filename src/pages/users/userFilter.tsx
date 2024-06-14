@@ -12,7 +12,7 @@ const UserFilter = ({ children }: UserFilterProps) => {
                     {' '}
                     <Row gutter={20}>
                         <Col span={8}>
-                            <Form.Item name="q">
+                            <Form.Item name="q" style={{ height: '0px' }}>
                                 <Input.Search
                                     allowClear={true}
                                     style={{ width: '100%' }}
@@ -21,7 +21,7 @@ const UserFilter = ({ children }: UserFilterProps) => {
                             </Form.Item>
                         </Col>
                         <Col span={8}>
-                            <Form.Item name={'role'}>
+                            <Form.Item name={'role'} style={{ height: '0px' }}>
                                 <Select
                                     placeholder={'Role'}
                                     style={{ width: '100%' }}

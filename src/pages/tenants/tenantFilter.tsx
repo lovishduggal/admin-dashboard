@@ -1,4 +1,4 @@
-import { Card, Col, Input, Row, Select } from 'antd';
+import { Card, Col, Input, Row } from 'antd';
 
 type TenantFilterProps = {
     children: React.ReactNode;
@@ -25,7 +25,7 @@ const TenantFilter = ({ onFilterChange, children }: TenantFilterProps) => {
                                 }
                             />{' '}
                         </Col>
-                        <Col span={8}>
+                        {/* <Col span={8}>
                             <Select
                                 placeholder={'Role'}
                                 style={{ width: '100%' }}
@@ -46,8 +46,8 @@ const TenantFilter = ({ onFilterChange, children }: TenantFilterProps) => {
                                     children={'Customer'}
                                 />
                             </Select>
-                        </Col>
-                        <Col span={8}>
+                        </Col> */}
+                        {/* <Col span={8}>
                             <Select
                                 placeholder={'Status'}
                                 style={{ width: '100%' }}
@@ -61,7 +61,7 @@ const TenantFilter = ({ onFilterChange, children }: TenantFilterProps) => {
                                     children={'Active'}
                                 />
                             </Select>
-                        </Col>
+                        </Col> */}
                     </Row>{' '}
                 </Col>
                 <Col

@@ -21,11 +21,12 @@ import { createUser, getUsers } from '../../http/api';
 import Spinner from '../../components/spinner/Spinner';
 import { CreateUserData, FieldData, UserData } from '../../types';
 import { useAuthStore } from '../../store';
-import UserFilter from './userFilter';
+
 import { useMemo, useState } from 'react';
 import UserForm from './forms/UserForm';
 import { PER_PAGE } from '../../constants';
 import { debounce } from 'lodash';
+import UserFilter from './UserFilter';
 
 const columns = [
     {
@@ -118,7 +119,6 @@ const Users = () => {
     }, []);
 
     const onFilterChange = (changeFields: FieldData[]) => {
-        console.log(changeFields);
         const changedFilterFields = changeFields
             .map((item) => ({
                 [item.name[0]]: item.value,
