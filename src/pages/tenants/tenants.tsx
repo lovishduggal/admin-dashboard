@@ -10,14 +10,14 @@ import {
     Space,
     Table,
 } from 'antd';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { createTenant, getTenants } from '../../http/api';
 import Spinner from '../../components/spinner/Spinner';
-import { useAuthStore } from '../../store';
 import UserFilter from './TenantFilter';
 import { useState } from 'react';
 import TenantForm from './forms/TenantForm';
 import { CreateTenantData } from '../../types';
+import { PER_PAGE } from '../../constants';
 
 const columns = [
     {
@@ -39,9 +39,12 @@ const columns = [
 
 const Tenants = () => {
     const queryClient = useQueryClient();
-    const { user } = useAuthStore();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [form] = Form.useForm();
+    const [queryParams, setQueryParams] = useState({
+        perPage: PER_PAGE,
+        currentPage: 1,
+    });
 
     const {
         data: tenants,
@@ -49,9 +52,17 @@ const Tenants = () => {
         isError,
         error,
     } = useQuery({
-        queryKey: ['tenants'],
-        queryFn: () => getTenants().then((res) => res.data),
-        enabled: user?.role === 'admin',
+        queryKey: ['tenants', queryParams],
+        queryFn: () => {
+            const filteredParams = Object.entries(queryParams).filter(
+                (item) => !!item[1]
+            );
+
+            const queryString = new URLSearchParams(
+                filteredParams as unknown as Record<string, string>
+            ).toString();
+            return getTenants(queryString).then((res) => res.data);
+        },
     });
 
     const { mutate: tenantMutate } = useMutation({
@@ -62,10 +73,6 @@ const Tenants = () => {
             queryClient.invalidateQueries({ queryKey: ['tenants'] });
         },
     });
-
-    if (user?.role !== 'admin') {
-        return <Navigate to="/"></Navigate>;
-    }
 
     const onHandleSubmit = async () => {
         await form.validateFields();
@@ -116,8 +123,18 @@ const Tenants = () => {
                 {tenants && (
                     <Table
                         columns={columns}
-                        dataSource={tenants}
+                        dataSource={tenants?.data}
                         rowKey={'id'}
+                        pagination={{
+                            total: tenants?.total,
+                            defaultPageSize: queryParams.perPage,
+                            current: queryParams.currentPage,
+                            onChange: (page) => {
+                                setQueryParams((prev) => {
+                                    return { ...prev, currentPage: page };
+                                });
+                            },
+                        }}
                     />
                 )}
 

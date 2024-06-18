@@ -8,7 +8,7 @@ const UserForm = () => {
     const { user } = useAuthStore();
     const { data: tenants } = useQuery({
         queryKey: ['tenants'],
-        queryFn: () => getTenants().then((res) => res.data),
+        queryFn: () => getTenants('').then((res) => res.data),
         enabled: user?.role === 'admin',
     });
 
@@ -135,7 +135,7 @@ const UserForm = () => {
                                         allowClear
                                         onChange={() => {}}>
                                         {tenants &&
-                                            tenants.map((tenant: Tenant) => (
+                                            tenants?.data.map((tenant: Tenant) => (
                                                 <Select.Option
                                                     key={tenant.id}
                                                     value={tenant.id}
