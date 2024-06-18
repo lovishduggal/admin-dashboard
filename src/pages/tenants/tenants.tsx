@@ -1,5 +1,10 @@
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+    keepPreviousData,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from '@tanstack/react-query';
 import {
     Alert,
     Breadcrumb,
@@ -13,11 +18,12 @@ import {
 import { Link } from 'react-router-dom';
 import { createTenant, getTenants } from '../../http/api';
 import Spinner from '../../components/spinner/Spinner';
-import UserFilter from './TenantFilter';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import TenantForm from './forms/TenantForm';
-import { CreateTenantData } from '../../types';
+import { CreateTenantData, FieldData } from '../../types';
 import { PER_PAGE } from '../../constants';
+import TenantFilter from './TenantFilter';
+import { debounce } from 'lodash';
 
 const columns = [
     {
@@ -41,6 +47,7 @@ const Tenants = () => {
     const queryClient = useQueryClient();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [form] = Form.useForm();
+    const [filterForm] = Form.useForm();
     const [queryParams, setQueryParams] = useState({
         perPage: PER_PAGE,
         currentPage: 1,
@@ -63,6 +70,7 @@ const Tenants = () => {
             ).toString();
             return getTenants(queryString).then((res) => res.data);
         },
+        placeholderData: keepPreviousData,
     });
 
     const { mutate: tenantMutate } = useMutation({
@@ -79,6 +87,30 @@ const Tenants = () => {
         await tenantMutate(form.getFieldsValue());
         setDrawerOpen(false);
         form.resetFields();
+    };
+
+    const debounceQUpdate = useMemo(() => {
+        return debounce((q: string | undefined) => {
+            setQueryParams((prev) => {
+                return { ...prev, q };
+            });
+        }, 1000);
+    }, []);
+
+    const onFilterChange = (changeFields: FieldData[]) => {
+        const changedFilterFields = changeFields
+            .map((item) => ({
+                [item.name[0]]: item.value,
+            }))
+            .reduce((prev, curr) => ({ ...prev, ...curr }), {});
+
+        if ('q' in changedFilterFields) {
+            debounceQUpdate(changedFilterFields.q);
+        } else {
+            setQueryParams((prev) => {
+                return { ...prev, ...changedFilterFields };
+            });
+        }
     };
 
     return (
@@ -106,19 +138,17 @@ const Tenants = () => {
                 {isError && (
                     <Alert message={error.message} type="error" closable />
                 )}
-
-                <UserFilter
-                    onFilterChange={(filterName, filterValue) => {
-                        console.log(filterName, filterValue);
-                    }}>
-                    {' '}
-                    <Button
-                        type="primary"
-                        icon={<PlusOutlined />}
-                        onClick={() => setDrawerOpen(true)}>
-                        Create Tenant
-                    </Button>
-                </UserFilter>
+                <Form form={filterForm} onFieldsChange={onFilterChange}>
+                    <TenantFilter>
+                        {' '}
+                        <Button
+                            type="primary"
+                            icon={<PlusOutlined />}
+                            onClick={() => setDrawerOpen(true)}>
+                            Create Tenant
+                        </Button>
+                    </TenantFilter>
+                </Form>
 
                 {tenants && (
                     <Table
