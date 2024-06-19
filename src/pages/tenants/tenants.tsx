@@ -92,7 +92,7 @@ const Tenants = () => {
     const debounceQUpdate = useMemo(() => {
         return debounce((q: string | undefined) => {
             setQueryParams((prev) => {
-                return { ...prev, q , currentPage: 1 };
+                return { ...prev, q, currentPage: 1 };
             });
         }, 500);
     }, []);
@@ -108,7 +108,7 @@ const Tenants = () => {
             debounceQUpdate(changedFilterFields.q);
         } else {
             setQueryParams((prev) => {
-                return { ...prev, ...changedFilterFields , currentPage};
+                return { ...prev, ...changedFilterFields, currentPage: 1 };
             });
         }
     };
@@ -162,6 +162,8 @@ const Tenants = () => {
                                     return { ...prev, currentPage: page };
                                 });
                             },
+                            showTotal: (total: number, range: number[]) =>
+                                `Showing ${range[0]}-${range[1]} of ${total} items`,
                         }}
                     />
                 )}
