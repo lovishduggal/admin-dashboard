@@ -55,7 +55,7 @@ const Tenants = () => {
 
     const {
         data: tenants,
-        isLoading,
+        isFetching,
         isError,
         error,
     } = useQuery({
@@ -119,25 +119,23 @@ const Tenants = () => {
                 direction="vertical"
                 size={'large'}
                 style={{ width: '100%' }}>
-                <Breadcrumb
-                    separator={<RightOutlined />}
-                    items={[
-                        { title: <Link to="/">Dashboard</Link> },
-                        { title: 'Users' },
-                    ]}
-                />
-                {isLoading && (
-                    <Flex
-                        style={{ height: 'calc(100vh - 206px)' }}
-                        align="center"
-                        justify="center"
-                        gap="middle">
-                        <Spinner />
-                    </Flex>
-                )}
-                {isError && (
-                    <Alert message={error.message} type="error" closable />
-                )}
+                <Flex justify="space-between" align="center">
+                    <Breadcrumb
+                        separator={<RightOutlined />}
+                        items={[
+                            { title: <Link to="/">Dashboard</Link> },
+                            { title: 'Users' },
+                        ]}
+                    />
+                    {isFetching && (
+                        <Flex align="center" justify="center" gap="middle">
+                            <Spinner />
+                        </Flex>
+                    )}
+                    {isError && (
+                        <Alert message={error.message} type="error" closable />
+                    )}
+                </Flex>
                 <Form form={filterForm} onFieldsChange={onFilterChange}>
                     <TenantFilter>
                         {' '}
