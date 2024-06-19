@@ -92,7 +92,7 @@ const Tenants = () => {
     const debounceQUpdate = useMemo(() => {
         return debounce((q: string | undefined) => {
             setQueryParams((prev) => {
-                return { ...prev, q };
+                return { ...prev, q , currentPage: 1 };
             });
         }, 500);
     }, []);
@@ -108,7 +108,7 @@ const Tenants = () => {
             debounceQUpdate(changedFilterFields.q);
         } else {
             setQueryParams((prev) => {
-                return { ...prev, ...changedFilterFields };
+                return { ...prev, ...changedFilterFields , currentPage};
             });
         }
     };
