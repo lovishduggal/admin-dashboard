@@ -94,7 +94,7 @@ const Tenants = () => {
             setQueryParams((prev) => {
                 return { ...prev, q };
             });
-        }, 1000);
+        }, 500);
     }, []);
 
     const onFilterChange = (changeFields: FieldData[]) => {
