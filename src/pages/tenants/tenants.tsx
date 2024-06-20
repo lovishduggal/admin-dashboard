@@ -15,7 +15,7 @@ import {
     Space,
     Table,
 } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { createTenant, getTenants } from '../../http/api';
 import Spinner from '../../components/spinner/Spinner';
 import { useMemo, useState } from 'react';
@@ -24,6 +24,7 @@ import { CreateTenantData, FieldData } from '../../types';
 import { PER_PAGE } from '../../constants';
 import TenantFilter from './TenantFilter';
 import { debounce } from 'lodash';
+import { useAuthStore } from '../../store';
 
 const columns = [
     {
@@ -45,6 +46,7 @@ const columns = [
 
 const Tenants = () => {
     const queryClient = useQueryClient();
+    const { user } = useAuthStore();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [form] = Form.useForm();
     const [filterForm] = Form.useForm();
@@ -70,6 +72,7 @@ const Tenants = () => {
             ).toString();
             return getTenants(queryString).then((res) => res.data);
         },
+        enabled: user?.role === 'admin',
         placeholderData: keepPreviousData,
     });
 
@@ -96,6 +99,10 @@ const Tenants = () => {
             });
         }, 500);
     }, []);
+
+    if (user?.role !== 'admin') {
+        return <Navigate to="/"></Navigate>;
+    }
 
     const onFilterChange = (changeFields: FieldData[]) => {
         const changedFilterFields = changeFields
