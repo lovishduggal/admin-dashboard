@@ -128,10 +128,11 @@ const Tenants = () => {
                 style={{ width: '100%' }}>
                 <Flex justify="space-between" align="center">
                     <Breadcrumb
+                        style={{ padding: '12px 0' }}
                         separator={<RightOutlined />}
                         items={[
                             { title: <Link to="/">Dashboard</Link> },
-                            { title: 'Users' },
+                            { title: 'Tenants' },
                         ]}
                     />
                     {isFetching && (

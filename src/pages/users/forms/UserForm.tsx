@@ -4,7 +4,7 @@ import { getTenants } from '../../../http/api';
 import { Tenant } from '../../../types';
 import { useAuthStore } from '../../../store';
 
-const UserForm = () => {
+const UserForm = ({ isEditMode = false }: { isEditMode: boolean }) => {
     const { user } = useAuthStore();
     const { data: tenants } = useQuery({
         queryKey: ['tenants'],
@@ -66,24 +66,26 @@ const UserForm = () => {
                             </Col>
                         </Row>
                     </Card>
-                    <Card title={'Security info'} bordered={false}>
-                        <Row gutter={20}>
-                            <Col span={12}>
-                                <Form.Item
-                                    label={'Password'}
-                                    name="password"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message:
-                                                'Please input your password!',
-                                        },
-                                    ]}>
-                                    <Input size="large" type="password" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Card>
+                    {!isEditMode && (
+                        <Card title={'Security info'} bordered={false}>
+                            <Row gutter={20}>
+                                <Col span={12}>
+                                    <Form.Item
+                                        label={'Password'}
+                                        name="password"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message:
+                                                    'Please input your password!',
+                                            },
+                                        ]}>
+                                        <Input size="large" type="password" />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        </Card>
+                    )}
                     <Card title={'Role'} bordered={false}>
                         <Row gutter={20}>
                             <Col span={12}>
@@ -97,6 +99,7 @@ const UserForm = () => {
                                         },
                                     ]}>
                                     <Select
+                                        id="selectBoxInUserForm"
                                         size="large"
                                         placeholder={'Role'}
                                         style={{ width: '100%' }}
@@ -132,16 +135,17 @@ const UserForm = () => {
                                         size="large"
                                         placeholder={'Tenant'}
                                         style={{ width: '100%' }}
-                                        allowClear
-                                        onChange={() => {}}>
+                                        allowClear>
                                         {tenants &&
-                                            tenants?.data.map((tenant: Tenant) => (
-                                                <Select.Option
-                                                    key={tenant.id}
-                                                    value={tenant.id}
-                                                    children={tenant.name}
-                                                />
-                                            ))}
+                                            tenants?.data.map(
+                                                (tenant: Tenant) => (
+                                                    <Select.Option
+                                                        key={tenant.id}
+                                                        defaultValue={tenant.id}
+                                                        children={tenant.name}
+                                                    />
+                                                )
+                                            )}
                                     </Select>
                                 </Form.Item>
                             </Col>
